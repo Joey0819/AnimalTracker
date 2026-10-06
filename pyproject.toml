@@ -1,0 +1,104 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "densetrack"
+version = "0.1.0"
+description = "Foundation-Model AutoLabel MOT for laboratory animal tracking"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "DenseTrack Team"},
+]
+keywords = ["animal-tracking", "multi-object-tracking", "auto-labeling", "pose-estimation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+
+dependencies = [
+    # Core
+    "numpy>=1.24",
+    "opencv-python-headless>=4.8",
+    "scipy>=1.11",
+    "torch>=2.1",
+    "torchvision>=0.16",
+    # Data & Config
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "pyyaml>=6.0",
+    # CLI
+    "typer[all]>=0.9",
+    "rich>=13.0",
+    # Tracking
+    "lap>=0.4",            # Linear assignment (for Hungarian)
+    "filterpy>=1.4",       # Kalman filter
+    # Evaluation
+    "motmetrics>=1.4",
+    "pandas>=2.0",
+    # Video/Image
+    "Pillow>=10.0",
+    "tqdm>=4.65",
+]
+
+[project.optional-dependencies]
+# Heavy model backends — install only what you need
+grounding-dino = [
+    "groundingdino-py>=0.4",
+    "supervision>=0.18",
+]
+sam2 = [
+    "sam-2>=1.0",
+]
+dlc = [
+    "deeplabcut>=3.0",
+]
+reid = [
+    "timm>=0.9",
+]
+behavior = [
+    "umap-learn>=0.5",
+    "hdbscan>=0.8",
+]
+norfair = [
+    "numpy>=1.24,<2.0",
+    "norfair>=2.3.0",
+]
+# All backends
+full = [
+    "densetrack[grounding-dino,sam2,dlc,reid,behavior,norfair]",
+]
+# Development
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1",
+    "mypy>=1.5",
+]
+
+[project.scripts]
+densetrack = "densetrack.cli:app"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true

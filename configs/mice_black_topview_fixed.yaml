@@ -1,0 +1,41 @@
+species: mouse
+n_animals: 4
+
+detection:
+  backend: dark_object
+  detection_prompt: top-view black laboratory mouse
+  min_mask_area: 400
+  max_mask_area: 25000
+
+sam2:
+  enabled: false
+
+pose:
+  backend: geometry
+  fallback_to_geometry: true
+
+tracklet:
+  backend: fixed_count
+  fixed_max_assignment_distance: 150
+  fixed_prediction_confidence: 0.55
+
+reid:
+  enabled: false
+
+global_optimizer:
+  method: greedy
+  max_temporal_gap: 250
+  min_link_confidence: 0.2
+
+export:
+  formats:
+    - mot
+    - coco
+    - csv
+    - sleap
+  min_confidence: 0.0
+  overlay_video: true
+  overlay_fps: null
+
+processing_resolution: 0
+device: auto

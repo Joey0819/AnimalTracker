@@ -1,0 +1,45 @@
+# DenseTrack-AI: mature open-source Norfair MOT backend
+# 通用俯视小鼠追踪配置，优先复用 BSD-3 开源 Norfair tracker。
+
+species: mouse
+n_animals: 5
+
+detection:
+  backend: background_sub
+  detection_prompt: top-view laboratory mouse
+  min_mask_area: 500
+  max_mask_area: 15000
+
+sam2:
+  enabled: false
+
+pose:
+  backend: geometry
+  fallback_to_geometry: true
+
+tracklet:
+  backend: norfair
+  tau_low: 0.1
+  track_buffer: 15
+  fixed_max_assignment_distance: 120
+
+reid:
+  enabled: false
+
+global_optimizer:
+  method: greedy
+  max_temporal_gap: 250
+  min_link_confidence: 0.2
+
+export:
+  formats:
+    - mot
+    - coco
+    - csv
+    - sleap
+  min_confidence: 0.0
+  overlay_video: true
+  overlay_fps: null
+
+processing_resolution: 720
+device: auto

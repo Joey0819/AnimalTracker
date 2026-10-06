@@ -1,0 +1,22 @@
+mouse_topview:
+  detection_prompt: "top-view laboratory mouse . white mouse . black mouse"
+  sam2_points_per_side: 32
+  min_mask_area: 500
+  max_mask_area: 15000
+
+mouse_black_topview:
+  detection_prompt: "top-view black laboratory mouse"
+  detector_backend: dark_object
+  tracklet_backend: fixed_count
+  min_mask_area: 400
+  max_mask_area: 25000
+
+insect_arena:
+  detection_prompt: "insect . beetle . ant . fly"
+  min_mask_area: 100
+  max_mask_area: 5000
+
+zebrafish_tank:
+  detection_prompt: "zebrafish . small fish from top view"
+  min_mask_area: 200
+  max_mask_area: 8000

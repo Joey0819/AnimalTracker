@@ -1,0 +1,57 @@
+# DenseTrack-AI Configuration: 4xPD.mp4 (Full Phase 1 Pipeline)
+# 4 black mice, top-view, 820x800, 15fps, light bedding
+
+species: mouse
+n_animals: 4
+video_path: "4xPD.mp4"
+output_dir: "results/4xPD_full_run"
+
+detection:
+  backend: dark_object
+  min_mask_area: 1500
+  max_mask_area: 60000
+
+sam2:
+  enabled: false
+
+pose:
+  backend: geometry
+  fallback_to_geometry: true
+
+tracklet:
+  backend: bytetrack
+  tau_high: 0.5
+  tau_low: 0.1
+  match_thresh: 0.7
+  track_buffer: 30
+
+global_optimizer:
+  method: hungarian
+  max_temporal_gap: 150
+
+reid:
+  enabled: true
+  feat_dim: 128
+  backbone: resnet18
+  confidence_threshold: 0.10
+  min_triplets: 20
+  epochs: 5
+  learning_rate: 0.0001
+  margin: 0.3
+  max_iterations: 2
+
+confidence:
+  high_threshold: 0.8
+  medium_threshold: 0.5
+  low_threshold: 0.2
+
+export:
+  formats:
+    - mot
+    - coco
+    - csv
+  overlay_video: true
+  min_confidence: 0.0
+
+processing_resolution: 0
+device: auto

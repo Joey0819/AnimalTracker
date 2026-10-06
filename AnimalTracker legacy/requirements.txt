@@ -1,0 +1,29 @@
+# 核心依赖
+streamlit>=1.28.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+pandas>=2.0.0
+plotly>=5.14.0
+
+# 目标检测
+ultralytics>=8.0.0  # YOLOv8
+torch>=2.0.0
+torchvision>=0.15.0
+
+# 多目标追踪
+filterpy>=1.4.5
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# 行为分析
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# 可视化
+matplotlib>=3.7.0
+seaborn>=0.12.0
+Pillow>=10.0.0
+
+# 工具
+tqdm>=4.65.0
+pyyaml>=6.0

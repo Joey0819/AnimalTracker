@@ -1,0 +1,48 @@
+# DenseTrack-AI optional UDMT external backend template.
+#
+# This file documents the integration contract. UDMT is intentionally kept
+# outside this Apache-2.0 project because its public license is limited to
+# academic/non-profit non-commercial research use.
+
+udmt:
+  enabled: true
+  udmt_home: /path/to/UDMT
+  python_executable: /path/to/udmt/conda/bin/python
+  license_accepted: false
+  auto_init: true
+
+external_tracker:
+  backend: udmt_external
+  udmt_home: "${UDMT_HOME}"
+  python_executable: "${UDMT_PYTHON:-python}"
+  license_accepted: false
+  launch_command: "python -m udmt.gui.launch_script"
+
+auto_initialization:
+  enabled: true
+  command: "densetrack udmt-handoff video.mp4 --config configs/mice_black_topview_fixed.yaml --n-animals 4 --output results/video_udmt_handoff"
+  output_json: "initialization_points.json"
+  output_image: "initialization_points.jpg"
+  output_udmt_start_pos: "start_pos_array.txt"
+  output_udmt_workspace_seed: "udmt_workspace_seed/tmp/<video>/extracted-images/start_pos_array.txt"
+  intent: "Replace first-frame manual clicks with an official-workspace-compatible detector-derived seed file whenever possible."
+
+runtime:
+  recommended_os: "Ubuntu 20.04+"
+  recommended_python: "3.8"
+  recommended_gpu: "NVIDIA CUDA"
+  notes:
+    - "Use a separate conda environment for UDMT."
+    - "Do not install UDMT dependencies into the DenseTrack Python 3.10+ environment."
+    - "Run `densetrack udmt-check --udmt-home ... --udmt-python ... --accept-license` before use."
+
+import_contract:
+  first_supported_format: "mot"
+  mot_columns: "frame,id,bb_left,bb_top,bb_width,bb_height,confidence,..."
+  command: "densetrack udmt-import path/to/udmt_tracks.mot --output results/udmt_import"
+  dense_outputs:
+    - tracks.mot
+    - detections.coco.json
+    - poses.csv
+    - labels.sleap.json
+    - run_summary.json

@@ -1,0 +1,51 @@
+# DenseTrack-AI Configuration: 4xPD.mp4
+# 4 black mice, top-view, 820x800, 15fps, light bedding
+
+species: mouse
+n_animals: 4
+video_path: "4xPD.mp4"
+output_dir: "results/4xPD_run"
+
+detection:
+  backend: dark_object
+  min_mask_area: 1500
+  max_mask_area: 60000
+
+sam2:
+  enabled: false  # Not installed yet
+
+pose:
+  backend: geometry  # Use geometric features (no DLC dependency)
+  fallback_to_geometry: true
+
+tracklet:
+  backend: fixed_count
+  tau_high: 0.4
+  tau_low: 0.1
+  match_thresh: 0.5
+  track_buffer: 30  # 2 seconds at 15fps
+  fixed_max_assignment_distance: 150.0
+  fixed_prediction_confidence: 0.35
+
+global_optimizer:
+  method: greedy
+  max_temporal_gap: 150  # 10 seconds at 15fps
+
+reid:
+  enabled: false  # Skip for initial run (no video frame storage)
+
+confidence:
+  high_threshold: 0.8
+  medium_threshold: 0.5
+  low_threshold: 0.2
+
+export:
+  formats:
+    - mot
+    - coco
+    - csv
+  overlay_video: true
+  min_confidence: 0.0
+
+processing_resolution: 0  # No resize (820x800 is already small)
+device: auto

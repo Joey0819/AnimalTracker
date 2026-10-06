@@ -1,0 +1,98 @@
+# DenseTrack-AI: Mac-native zero-click adaptive bidirectional tracking
+# 4 black mice, top-view, 820x800, 15fps, light bedding
+
+species: mouse
+n_animals: 4
+video_path: "4xPD.mp4"
+output_dir: "results/4xPD_mac_adaptive_complete"
+
+detection:
+  backend: dark_object
+  min_mask_area: 1500
+  max_mask_area: 60000
+
+sam2:
+  enabled: false
+
+pose:
+  backend: geometry
+  fallback_to_geometry: true
+
+tracklet:
+  backend: mac_adaptive
+  fixed_max_assignment_distance: 150.0
+  fixed_prediction_confidence: 0.35
+  adaptive_appearance_weight: 0.35
+  adaptive_template_momentum: 0.12
+  adaptive_template_update_cost: 0.72
+  adaptive_template_min_margin: 0.08
+  adaptive_template_min_confidence: 0.55
+  adaptive_template_bank_size: 8
+  adaptive_init_window: 120
+  adaptive_consistency_distance: 90.0
+  adaptive_identity_smoothing: true
+  adaptive_smoothing_motion_weight: 0.70
+  adaptive_smoothing_evidence_weight: 0.55
+  adaptive_smoothing_appearance_weight: 0.20
+  adaptive_discrete_geometry: true
+  adaptive_geometry_weight: 0.30
+  adaptive_geometry_coarse_bins: 8
+  adaptive_geometry_fine_bins: 8
+  adaptive_geometry_knn: 5
+  adaptive_velocity_window: 7
+  adaptive_reacquisition_min_margin: 0.035
+  adaptive_reacquisition_distance_growth: 5.0
+  adaptive_max_reacquisition_distance: 200.0
+  adaptive_contact_distance: 75.0
+  adaptive_contact_min_margin: 0.075
+  adaptive_merged_area_ratio: 1.65
+  adaptive_smoothing_geometry_weight: 0.50
+  adaptive_smoothing_velocity_weight: 0.65
+  adaptive_smoothing_jump_penalty: 8.0
+  adaptive_smoothing_max_states: 128
+
+global_optimizer:
+  method: long_term
+  max_temporal_gap: 150
+  long_term_geometry_weight: 0.25
+  long_term_velocity_window: 7
+  long_term_coarse_bins: 8
+  long_term_fine_bins: 8
+  closed_set_stitching: true
+
+reid:
+  enabled: false
+
+representation:
+  enabled: true
+  dim: 8
+  window_frames: 15
+  sample_every: 3
+  camera_manifest: null
+
+bioacoustic_ssl:
+  enabled: false
+  audio_path: null
+  species: dolphin
+
+experiment:
+  enabled: true
+  template_id: open_field
+  time_bin_s: 60.0
+
+confidence:
+  high_threshold: 0.8
+  medium_threshold: 0.5
+  low_threshold: 0.2
+
+export:
+  formats:
+    - mot
+    - coco
+    - csv
+    - sleap
+  overlay_video: true
+  min_confidence: 0.0
+
+processing_resolution: 0
+device: auto

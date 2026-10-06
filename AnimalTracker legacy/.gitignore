@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.tmp.*
+
+# Streamlit logs
+.streamlit-run.log
+.streamlit-run.err.log
+
+# Claude / AI config
+.claude/
+
+# Data artifacts (large files)
+data/videos/
+data/models/
+data/results/*.mp4
+data/results/*.avi
+data/results/__*
+openh264-1.8.0-win64.dll
+*.pt
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# PDF papers
+*.pdf
+
+# Downloads
+.downloads/

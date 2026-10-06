@@ -1,0 +1,84 @@
+# DenseTrack-AI Configuration: Mouse Top-View
+# =============================================
+# Optimized for overhead/top-down laboratory mouse cage recordings.
+#
+# Usage:
+#   densetrack run --video cage.mp4 --config configs/mice_topview.yaml --n-animals 5
+
+species: mouse
+n_animals: 4  # Override via CLI: --n-animals
+
+# Processing
+processing_resolution: 1080  # 0 = no resize
+device: auto  # auto | cpu | cuda | mps
+
+# --- Detection ---
+detection:
+  backend: background_sub
+  detection_prompt: "top-view laboratory mouse . white mouse . black mouse"
+  box_threshold: 0.25
+  text_threshold: 0.25
+  min_mask_area: 500
+  max_mask_area: 15000
+  redetect_interval: 25  # Re-detect every N frames to correct SAM2 drift
+
+# --- SAM 2 Video Segmentation ---
+sam2:
+  enabled: false
+  model_variant: sam2_hiera_large
+  points_per_side: 32
+
+# --- Pose Estimation ---
+pose:
+  backend: geometry
+  superanimal_name: superanimal_topviewmouse
+  model_name: hrnet_w32
+  video_adapt: true   # Adapt to current video to reduce jitter
+  fallback_to_geometry: true  # Use mask geometry if keypoints fail
+
+# --- Tracklet Generation (ByteTrack) ---
+tracklet:
+  backend: bytetrack
+  tau_high: 0.5
+  tau_low: 0.1
+  match_thresh: 0.7   # Strict IoU — prefer breaking over wrong link
+  track_buffer: 10     # ~0.4s at 25fps — intentionally short
+
+# --- Global Optimization ---
+global_optimizer:
+  method: greedy  # greedy | hungarian | ilp | min_cost_flow | long_term
+  max_temporal_gap: 250  # ~10 sec at 25fps
+  weights:
+    motion: 0.25       # Position/velocity continuity
+    appearance: 0.20   # ReID visual similarity
+    size: 0.15         # Body area consistency
+    orientation: 0.10  # Heading consistency
+    pose: 0.15         # Pose similarity (if available)
+    temporal_gap: 0.15 # Penalty for long gaps
+
+# --- Self-Supervised ReID ---
+reid:
+  enabled: true
+  feat_dim: 128
+  backbone: resnet18
+  confidence_threshold: 0.8
+  min_triplets: 50
+  epochs: 10
+  learning_rate: 0.0001
+  margin: 0.3
+  max_iterations: 3  # Self-improvement loops per video
+
+# --- Confidence Audit ---
+confidence:
+  high_threshold: 0.8
+  medium_threshold: 0.5
+  low_threshold: 0.2
+
+# --- Export ---
+export:
+  formats:
+    - mot
+    - coco
+    - csv
+  min_confidence: 0.0  # 0.0 = export everything; 0.8 = high-conf only
+  overlay_video: true
